@@ -41,3 +41,6 @@ def clean_df():
     arms_imports.to_csv(cleaned_arms_import_path)
 
     return 0
+
+if __name__ == '__main__':
+    clean_df()
