@@ -1,4 +1,3 @@
-archive.zip
 *.csv
 __pycache__/
 __pycache__/*

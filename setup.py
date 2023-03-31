@@ -1,20 +1,17 @@
-
 import os
 import numpy as np
 import pandas as pd
 
-dataset_path = './Arms Imports Per Country (1950-2020).csv'
-cleaned_dataset_path = './ArmsImport.csv'
-original_arms_imports: pd.DataFrame
-arms_imports: pd.DataFrame
-original_arms_imports = pd.read_csv(dataset_path)
-original_arms_imports.fillna(0, inplace=True)
+countries_path = './countries of the world.csv'
+arms_import_path = './Arms Imports Per Country (1950-2020).csv'
+cleaned_arms_import_path = './ArmsImport.csv'
 
-def main():
-    if os.path.isfile(cleaned_dataset_path) and __name__ != '__main__':
-        arms_imports = pd.read_csv(cleaned_dataset_path)
+def clean_df():
+    if os.path.isfile(cleaned_arms_import_path) and __name__ != '__main__':
         return 0
 
+    original_arms_imports = pd.read_csv(arms_import_path)
+    original_arms_imports.fillna(0, inplace=True)
     print(original_arms_imports.head())
     organization_year_data = [year.__str__() for year in np.arange(1950, 2021, 1)] + ['Total']
 
@@ -41,8 +38,6 @@ def main():
 
     arms_imports = pd.DataFrame(data=df_data)
     print(arms_imports.head())
-    arms_imports.to_csv(cleaned_dataset_path)
+    arms_imports.to_csv(cleaned_arms_import_path)
 
     return 0
-
-main()
