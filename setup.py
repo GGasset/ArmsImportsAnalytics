@@ -19,15 +19,18 @@ def clean_arms_dataframe():
     original_arms_imports = pd.read_csv(arms_import_path)
     original_arms_imports.fillna(0, inplace=True)
     print(original_arms_imports.head())
-    organization_year_data = [year.__str__() for year in np.arange(1950, 2021, 1)] + ['Total']
+    organization_year_data = [year.__str__() for year in np.arange(1950, 2021, 1)]
 
     year_data = organization_year_data * len(original_arms_imports['Country/Region/Group'])
     organization_data: list[str]
     organization_data = []
     for organization in original_arms_imports['Country/Region/Group']:
         organization_data += [organization] * len(organization_year_data)
-    values: list[float]
+    values: list[int]
     values = []
+
+    total_imports: list[int]
+    total_imports = []
     for organization in original_arms_imports['Country/Region/Group']:
         organization_condition = original_arms_imports['Country/Region/Group'] == organization
         organization_values = original_arms_imports[organization_condition][organization_year_data]
@@ -35,11 +38,14 @@ def clean_arms_dataframe():
         organization_values = list(organization_values.values[0])
 
         values += organization_values
+        total_imports += [original_arms_imports[organization_condition][['Total']].iloc[0, 0]] * len(organization_values)
         print(f'{len(values)}/{len(year_data)}')
+
     df_data = {
-        'Country/Region/Group': organization_data,
+        'country': organization_data,
         'year': year_data,
-        'value': values
+        'value': values,
+        'total_imports': None
         }
 
     arms_imports = pd.DataFrame(data=df_data)
