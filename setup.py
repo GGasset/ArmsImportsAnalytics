@@ -46,7 +46,7 @@ def clean_arms_dataframe():
         'country': organization_data,
         'year': year_data,
         'value': values,
-        'total_imports': None
+        'total_imports': total_imports
         }
 
     arms_imports = pd.DataFrame(data=df_data)
