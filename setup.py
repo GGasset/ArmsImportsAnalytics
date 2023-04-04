@@ -3,10 +3,16 @@ import numpy as np
 import pandas as pd
 
 countries_path = './countries of the world.csv'
+cleaned_countries_path = './countries.data'
 arms_import_path = './Arms Imports Per Country (1950-2020).csv'
-cleaned_arms_import_path = './ArmsImport.csv'
+cleaned_arms_import_path = './ArmsImport.data'
 
-def clean_df():
+def clean_dfs():
+    clean_arms_dataframe()
+    clean_countries_dataframe()
+    return 0
+
+def clean_arms_dataframe():
     if os.path.isfile(cleaned_arms_import_path) and __name__ != '__main__':
         return 0
 
@@ -38,9 +44,26 @@ def clean_df():
 
     arms_imports = pd.DataFrame(data=df_data)
     print(arms_imports.head())
-    arms_imports.to_csv(cleaned_arms_import_path)
+    arms_imports.to_feather(cleaned_arms_import_path)
+    print('Arms imports dataset cleaned and saved.')
+    return 0
 
+def clean_countries_dataframe():
+    if os.path.isfile(cleaned_countries_path) and __name__ != '__main__':
+        return 0
+
+    countries = pd.read_csv(countries_path)
+    print(countries.head())
+    print("'" + countries.iloc[0, 0] + "'")
+
+    countries_col = list(countries['Country'].values)
+    countries_col: list[str]
+    cleaned_countries_col = [country.removesuffix(' ') for country in countries_col]
+    countries['Country'] = cleaned_countries_col
+    print("'" + countries.iloc[0, 0] + "'")
+    countries.to_feather(cleaned_countries_path)
+    print('Countries dataset cleaned and saved.')
     return 0
 
 if __name__ == '__main__':
-    clean_df()
+    clean_dfs()
