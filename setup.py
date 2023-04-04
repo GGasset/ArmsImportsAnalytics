@@ -33,12 +33,13 @@ def clean_arms_dataframe():
     total_imports = []
     for organization in original_arms_imports['Country/Region/Group']:
         organization_condition = original_arms_imports['Country/Region/Group'] == organization
-        organization_values = original_arms_imports[organization_condition][organization_year_data]
+        arms_imports_of_organization = original_arms_imports[organization_condition]
+        organization_values = arms_imports_of_organization[organization_year_data]
         organization_values: pd.DataFrame
         organization_values = list(organization_values.values[0])
 
         values += organization_values
-        total_imports += [original_arms_imports[organization_condition][['Total']].iloc[0, 0]] * len(organization_values)
+        total_imports += [arms_imports_of_organization[['Total']].iloc[0, 0]] * len(organization_values)
         print(f'{len(values)}/{len(year_data)}')
 
     df_data = {
