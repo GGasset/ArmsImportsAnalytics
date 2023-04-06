@@ -13,9 +13,6 @@ def clean_dfs():
     return 0
 
 def clean_arms_dataframe():
-    if os.path.isfile(cleaned_arms_import_path) and __name__ != '__main__':
-        return 0
-
     original_arms_imports = pd.read_csv(arms_import_path)
     original_arms_imports.fillna(0, inplace=True)
     print(original_arms_imports.head())
@@ -50,17 +47,13 @@ def clean_arms_dataframe():
         }
 
     arms_imports = pd.DataFrame(data=df_data)
-    print(arms_imports.head())
+    print(arms_imports.drop_duplicates(subset='country').head())
     arms_imports.to_feather(cleaned_arms_import_path)
     print('Arms imports dataset cleaned and saved.')
-    return 0
+    return arms_imports
 
 def clean_countries_dataframe():
-    if os.path.isfile(cleaned_countries_path) and __name__ != '__main__':
-        return 0
-
     countries = pd.read_csv(countries_path)
-    print(countries.head())
     print("'" + countries.iloc[0, 0] + "'")
 
     countries_col = list(countries['Country'].values)
@@ -68,8 +61,9 @@ def clean_countries_dataframe():
     cleaned_countries_col = [country.removesuffix(' ') for country in countries_col]
     countries['Country'] = cleaned_countries_col
     print("'" + countries.iloc[0, 0] + "'")
+    countries.reset_index(inplace=True, drop=True)
+    print(countries.head())
     countries.to_feather(cleaned_countries_path)
-    print('Countries dataset cleaned and saved.')
     return 0
 
 if __name__ == '__main__':
