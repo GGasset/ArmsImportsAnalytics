@@ -76,7 +76,7 @@ def categorizeGDP(gdp: float) -> str:
     if gdp in range(15000):
         return 'low GDP'
     
-    if gdp in range(50000):
+    if gdp in range(27000):
         return 'medium GDP'
     
     if gdp in range(10 ** 6):
