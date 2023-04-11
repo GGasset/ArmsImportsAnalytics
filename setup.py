@@ -1,4 +1,5 @@
 import os
+import math
 import numpy as np
 import pandas as pd
 
@@ -60,11 +61,28 @@ def clean_countries_dataframe():
     countries_col: list[str]
     cleaned_countries_col = [country.removesuffix(' ') for country in countries_col]
     countries['Country'] = cleaned_countries_col
+    countries['categorized_GDP'] = countries['GDP ($ per capita)'].apply(categorizeGDP)
     print("'" + countries.iloc[0, 0] + "'")
     countries.reset_index(inplace=True, drop=True)
     print(countries.head())
     countries.to_feather(cleaned_countries_path)
+    print('Countries dataframe cleaned and saved')
     return 0
+
+def categorizeGDP(gdp: float) -> str:
+    if math.isnan(gdp):
+        return np.nan
+
+    if gdp in range(15000):
+        return 'low GDP'
+    
+    if gdp in range(50000):
+        return 'medium GDP'
+    
+    if gdp in range(10 ** 6):
+        return 'high GDP'
+    
+    return 'negative GDP'
 
 if __name__ == '__main__':
     clean_dfs()
